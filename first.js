@@ -164,7 +164,8 @@ function calculate99Price(price, length) {
   console.log("typeof ", typeof price);
   console.log("length ", length);
   orderPrice = (price / 100) * 99;
-  finalRes = orderPrice.toPrecision(length - 1);
+  console.log("orderPrice", orderPrice);
+  finalRes = orderPrice.toFixed(length - 1);
   console.log("PRICE!!!", finalRes);
   return finalRes;
 }
@@ -199,15 +200,18 @@ async function test() {
         var currentPrice = await getClient()
           .getBestBidAskPrice(coin_pair)
           .then((res) => res.result);
-        let priceLength = currentPrice.askPrice.toString().length;
-        console.log("coin pair", coin_pair);
+        let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
+        //if (coin_pair == "ETHUSDT") {
+        //console.log(currentPrice);
+        //console.log("coin pair", coin_pair);
         sellPrice = calculate99Price(currentPrice.askPrice, priceLength);
         sellTPSLOrder(coin_pair, balance.free, sellPrice);
+        //}
       } else {
         var currentPrice = await getClient()
           .getBestBidAskPrice(coin_pair)
           .then((res) => res.result);
-        let priceLength = currentPrice.askPrice.toString().length;
+        let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
         sellPrice = calculate99Price(currentPrice.askPrice, priceLength);
         //console.log(orders);
         order = orders[0];
