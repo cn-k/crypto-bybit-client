@@ -215,8 +215,8 @@ async function test() {
         sellPrice = calculate99Price(currentPrice.askPrice, priceLength);
         //console.log(orders);
         order = orders[0];
-        //if (order.triggerPrice > sellPrice) {
-        if (true) {
+        if (order.triggerPrice < sellPrice) {
+        //if (true) {
           console.log("length != 0");
           cancelOrdr = {
             orderId: order.orderId,
