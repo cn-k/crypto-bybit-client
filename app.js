@@ -163,7 +163,7 @@ function calculate99Price(price, length) {
   console.log("price??? ", price);
   console.log("typeof ", typeof price);
   console.log("length ", length);
-  orderPrice = (price / 100) * 99;
+  orderPrice = (price / 1000) * 995;
   console.log("orderPrice", orderPrice);
   finalRes = orderPrice.toFixed(length - 1);
   console.log("PRICE!!!", finalRes);
@@ -182,7 +182,7 @@ async function openOrders() {
  * loop in balances and if not usdt check open orders type 1
  **/
 // let [someResult, anotherResult] = await Promise.all([someCall(), anotherCall()]);
-async function test() {
+inverval_timer = setInterval(async function test() {
   const balanceRes = await getClient()
     .getBalances()
     .then((balances) => balances.result);
@@ -241,45 +241,5 @@ async function test() {
     }
   }
   return balances;
-}
+},20000);
 
-test();
-/*
-getBalance().then((balances) => {
-  for (i = 0; i < balances.length; i++) {
-    let balance = balances[i];
-    //console.log(balance);
-    //console.log("\n----");
-    let coin = balance.coin;
-    console.log("balance coin", coin);
-    let coin_pair = coin + "USDT";
-    if (coin != "USDT") {
-      var orders = await openOrders(coin_pair, 1);
-      console.log(orders);
-      
-      openOrders(coin_pair, 1).then((order) => {
-        console.log(coin, order.length);
-        console.log("!!!!!!!!!!!!!!!!!!!");
-        //console.log(order);
-        if (order.length == 0) {
-          askPrice(coin_pair).then((currentPrice) => {
-            console.log(currentPrice.askPrice);
-            sellPrice = calculate99Price(currentPrice.askPrice);
-            console.log(sellPrice);
-            sellTPSLOrder(coin_pair, balance.free, sellPrice);
-          });
-
-          //console.log(askPrice(coin_pair));
-          //calculate99Price()
-        }
-      });
-     
-    }
-  }
-});
-
-//sellTPSLOrder("DLCUSDT", "22", "0.1");
-//getBalance();
-//openOrders = openOrders("DLCUSDT", 1);
-//openOrders.then((orders) => console.log(orders));
-*/
