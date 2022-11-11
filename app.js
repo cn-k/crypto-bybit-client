@@ -175,13 +175,74 @@ async function openOrders() {
   return JSON.parse(JSON.stringify(res, null, "\t"));
 }
 */
-
+async function test() {
+  const balanceRes = await getClient()
+    .getBalances()
+    .then((balances) => balances.result);
+  const balances = balanceRes.balances;
+  for (i = 0; i < balances.length; i++) {
+    let balance = balances[i];
+    let coin = balance.coin;
+    let coin_pair = coin + "USDT";
+    if (coin != "USDT" && coin != "BIT") {
+      //console.log("coin_pair", coin_pair);
+      var orders = await openOrders(coin_pair, 1);
+      //console.log(orders);
+      if (orders.length == 0) {
+        console.log("length == 0");
+        var currentPrice = await getClient()
+          .getBestBidAskPrice(coin_pair)
+          .then((res) => res.result);
+        let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
+        //if (coin_pair == "ETHUSDT") {
+        //console.log(currentPrice);
+        //console.log("coin pair", coin_pair);
+        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 990);
+        sellTPSLOrder(coin_pair, balance.free, sellPrice);
+        //}
+      } else {
+        var currentPrice = await getClient()
+          .getBestBidAskPrice(coin_pair)
+          .then((res) => res.result);
+        let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
+        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 995);
+        //console.log(orders);
+        order = orders[0];
+        if (order.triggerPrice < sellPrice) {
+          //if (true) {
+          console.log("length != 0");
+          cancelOrdr = {
+            orderId: order.orderId,
+            orderLinkId: order.orderLinkId,
+            orderCategory: 1,
+          };
+          getClient()
+            .cancelOrder(cancelOrdr)
+            .then((cancelOrder) => {
+              //console.log("rescode --- ", cancelOrder.retCode);
+              //console.log("resMsg --- ", cancelOrder.retMsg);
+              //console.log("res result --- ", cancelOrder.result);
+              sellTPSLOrder(coin_pair, balance.total, sellPrice);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          //console.log(balance);
+          //console.log("cancel order");
+        }
+      }
+    }
+  }
+  return balances;
+}
+test();
 //buyMarketOrder("DLCUSDT", "3");
 
 /**
  * loop in balances and if not usdt check open orders type 1
  **/
 // let [someResult, anotherResult] = await Promise.all([someCall(), anotherCall()]);
+/*
 inverval_timer = setInterval(async function test() {
   const balanceRes = await getClient()
     .getBalances()
@@ -242,4 +303,4 @@ inverval_timer = setInterval(async function test() {
   }
   return balances;
 },20000);
-
+*/
