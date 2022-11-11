@@ -159,11 +159,11 @@ async function askPrice(symbol) {
   //console.log(JSON.stringify(res.result, null, "\t"));
   return JSON.parse(JSON.stringify(res.result, null, "\t"));
 }
-function calculate99Price(price, length) {
+function calculate99Price(price, length, ratio) {
   console.log("price??? ", price);
   console.log("typeof ", typeof price);
   console.log("length ", length);
-  orderPrice = (price / 1000) * 995;
+  orderPrice = (price / 1000) * ratio;
   console.log("orderPrice", orderPrice);
   finalRes = orderPrice.toFixed(length - 1);
   console.log("PRICE!!!", finalRes);
@@ -204,7 +204,7 @@ inverval_timer = setInterval(async function test() {
         //if (coin_pair == "ETHUSDT") {
         //console.log(currentPrice);
         //console.log("coin pair", coin_pair);
-        sellPrice = calculate99Price(currentPrice.askPrice, priceLength);
+        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 990);
         sellTPSLOrder(coin_pair, balance.free, sellPrice);
         //}
       } else {
@@ -212,7 +212,7 @@ inverval_timer = setInterval(async function test() {
           .getBestBidAskPrice(coin_pair)
           .then((res) => res.result);
         let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
-        sellPrice = calculate99Price(currentPrice.askPrice, priceLength);
+        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 995);
         //console.log(orders);
         order = orders[0];
         if (order.triggerPrice < sellPrice) {
