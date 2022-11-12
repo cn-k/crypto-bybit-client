@@ -212,7 +212,7 @@ async function test() {
           .getBestBidAskPrice(coin_pair)
           .then((res) => res.result);
         let priceLength = currentPrice.askPrice.toString().split(".")[1].length;
-        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 995);
+        sellPrice = calculate99Price(currentPrice.askPrice, priceLength, 990);
         //console.log(orders);
         order = orders[0];
         if (order.triggerPrice < sellPrice) {
