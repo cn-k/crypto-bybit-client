@@ -182,7 +182,7 @@ async function openOrders() {
  * loop in balances and if not usdt check open orders type 1
  **/
 // let [someResult, anotherResult] = await Promise.all([someCall(), anotherCall()]);
-inverval_timer = setInterval(async function test() {
+async function test() {
   const balanceRes = await getClient()
     .getBalances()
     .then((balances) => balances.result);
@@ -241,4 +241,6 @@ inverval_timer = setInterval(async function test() {
     }
   }
   return balances;
-}, 20000);
+}
+
+test();
